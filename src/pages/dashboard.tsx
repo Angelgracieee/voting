@@ -10,7 +10,7 @@ export async function getServerSideProps(ctx: any) {
   if (!session) {
     return {
       redirect: {
-        destination: "/api/auth/signin",
+        destination: "/login",
         permanent: false,
       },
     };
@@ -70,7 +70,7 @@ export default function Dashboard({ session }: any) {
             <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
               <div className="max-w-3xl">
                 <h1 className="bg-gradient-to-r from-cyan-300 via-blue-200 to-fuchsia-300 bg-clip-text text-3xl font-bold tracking-tight text-transparent xl:text-4xl">
-                  1st Bagong Cabuyao Inter-High Sports Meet
+                  Bagong Cabuyao Inter-High Sports Meet
                 </h1>
                 <p className="mt-1 text-sm text-slate-300">
                   Real-time voting dashboard powered by Google Sheets
