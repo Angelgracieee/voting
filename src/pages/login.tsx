@@ -1,3 +1,5 @@
+"use client";
+
 import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
@@ -16,7 +18,7 @@ export default function LoginPage() {
               prompt: "select_account",
             })
           }
-          className="mt-6 rounded-xl bg-cyan-400 px-4 py-2 font-semibold text-slate-950 hover:bg-cyan-300"
+          className="mt-6 rounded-xl bg-cyan-400 px-4 py-2 font-semibold text-slate-950 transition hover:bg-cyan-300"
         >
           Sign in with Google
         </button>
