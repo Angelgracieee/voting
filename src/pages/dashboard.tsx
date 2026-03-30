@@ -29,6 +29,8 @@ export default function Dashboard({ session }: any) {
   const [q, setQ] = useState("");
   const [sportFilter, setSportFilter] = useState("All");
   const [page, setPage] = useState(1);
+  const [selectedRecord, setSelectedRecord] = useState<any | null>(null);
+
   const pageSize = 10;
 
   const respondents = data?.respondents ?? [];
@@ -143,7 +145,7 @@ export default function Dashboard({ session }: any) {
         </div>
 
         <div className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-          <section className="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-[0_8px_30px_rgba(0,0,0,0.25)] backdrop-blur-xl">
+          <section className="h-[600px] rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-[0_8px_30px_rgba(0,0,0,0.25)] backdrop-blur-xl flex flex-col">
             <div className="mb-5 flex items-center justify-between">
               <div>
                 <h2 className="text-xl font-bold text-white/95">Voting Ranking</h2>
@@ -166,7 +168,7 @@ export default function Dashboard({ session }: any) {
             )}
 
             {!isLoading && !error && (
-              <div className="overflow-hidden rounded-[24px] border border-white/10 bg-white/5">
+              <div className="h-[500px] overflow-y-auto rounded-[24px] border border-white/10 bg-white/5">
                 <table className="w-full text-sm">
                   <thead className="bg-white/5 text-slate-300">
                     <tr>
@@ -201,7 +203,7 @@ export default function Dashboard({ session }: any) {
             )}
           </section>
 
-          <section className="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-[0_8px_30px_rgba(0,0,0,0.25)] backdrop-blur-xl">
+          <section className="h-[600px] rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-[0_8px_30px_rgba(0,0,0,0.25)] backdrop-blur-xl flex flex-col">
             <div className="mb-5">
               <h2 className="text-xl font-bold text-white/95">Respondents</h2>
               <p className="mt-1 text-sm text-slate-300">
@@ -240,8 +242,8 @@ export default function Dashboard({ session }: any) {
               Showing <span className="font-semibold text-white">{filtered.length}</span> result(s)
             </p>
 
-            <div className="overflow-hidden rounded-[24px] border border-white/10 bg-white/5">
-              <table className="w-full text-sm">
+            <div className="flex-1 overflow-y-auto rounded-[24px] border border-white/10 bg-white/5">
+              <table className="w-full table-fixed text-sm">
                 <thead className="bg-white/5 text-slate-300">
                   <tr>
                     <th className="px-4 py-3 text-left">Timestamp</th>
@@ -253,10 +255,16 @@ export default function Dashboard({ session }: any) {
                 </thead>
                 <tbody className="divide-y divide-white/10">
                   {paged.map((r: any, i: number) => (
-                    <tr key={i} className="align-top transition hover:bg-white/10">
+                    <tr
+                      key={i}
+                      onClick={() => setSelectedRecord(r)}
+                      className="cursor-pointer align-top transition hover:bg-white/10"
+                    >
                       <td className="px-4 py-3 text-slate-200">{r.timestamp}</td>
                       <td className="px-4 py-3">
-                        <div className="font-medium text-white">{r.school}</div>
+                        <div className="font-medium text-cyan-200">
+                          {r.school}
+                        </div>
                         <div className="text-xs text-slate-300">{r.schoolType}</div>
                       </td>
                       <td className="px-4 py-3 text-slate-200">{r.principal}</td>
@@ -338,6 +346,98 @@ export default function Dashboard({ session }: any) {
           </div>
         </footer>
       </div>
+
+      {selectedRecord && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 backdrop-blur-sm"
+          onClick={() => setSelectedRecord(null)}
+        >
+          <div
+            className="w-full max-w-2xl rounded-[28px] border border-white/10 bg-slate-950/95 p-6 shadow-[0_8px_40px_rgba(0,0,0,0.5)]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h2 className="text-2xl font-bold text-white">
+                  {selectedRecord.school}
+                </h2>
+                <p className="mt-1 text-sm text-slate-400">
+                  Submitted voting details
+                </p>
+              </div>
+
+              <button
+                onClick={() => setSelectedRecord(null)}
+                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-sm text-slate-300 transition hover:bg-white/10 hover:text-white"
+              >
+                Close
+              </button>
+            </div>
+
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              <div className="rounded-[20px] border border-white/10 bg-white/5 p-4">
+                <p className="text-xs uppercase tracking-wide text-slate-400">
+                  Principal
+                </p>
+                <p className="mt-1 text-sm text-white">
+                  {selectedRecord.principal || "N/A"}
+                </p>
+              </div>
+
+              <div className="rounded-[20px] border border-white/10 bg-white/5 p-4">
+                <p className="text-xs uppercase tracking-wide text-slate-400">
+                  Coordinator
+                </p>
+                <p className="mt-1 text-sm text-white">
+                  {selectedRecord.coordinator || "N/A"}
+                </p>
+              </div>
+
+              <div className="rounded-[20px] border border-white/10 bg-white/5 p-4">
+                <p className="text-xs uppercase tracking-wide text-slate-400">
+                  Email
+                </p>
+                <p className="mt-1 text-sm text-white break-all">
+                  {selectedRecord.email || "N/A"}
+                </p>
+              </div>
+
+              <div className="rounded-[20px] border border-white/10 bg-white/5 p-4">
+                <p className="text-xs uppercase tracking-wide text-slate-400">
+                  Timestamp
+                </p>
+                <p className="mt-1 text-sm text-white">
+                  {selectedRecord.timestamp || "N/A"}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 rounded-[20px] border border-white/10 bg-white/5 p-4">
+              <p className="text-xs uppercase tracking-wide text-slate-400">
+                Sports Voted For
+              </p>
+
+              <div className="mt-3 flex flex-wrap gap-2">
+                {Array.isArray(selectedRecord.selectedSports) &&
+                  selectedRecord.selectedSports.length > 0 ? (
+                  selectedRecord.selectedSports.map(
+                    (sport: string, index: number) => (
+                      <span
+                        key={index}
+                        className="rounded-full border border-cyan-300/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-200"
+                      >
+                        {sport}
+                      </span>
+                    )
+                  )
+                ) : (
+                  <p className="text-sm text-slate-400">No sports recorded.</p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
