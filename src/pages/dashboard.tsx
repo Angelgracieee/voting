@@ -265,7 +265,9 @@ export default function Dashboard({ session }: any) {
                         <div className="font-medium text-cyan-200">
                           {r.school}
                         </div>
-                        <div className="text-xs text-slate-300">{r.schoolType}</div>
+                        <div className="text-xs text-white-400 font-medium">
+                          {r.schoolType || "N/A"} - {r.schoolLevel || "N/A"}
+                        </div>
                       </td>
                       <td className="px-4 py-3 text-slate-200">{r.principal}</td>
                       <td className="px-4 py-3 text-slate-200">{r.coordinator}</td>
